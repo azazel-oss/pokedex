@@ -5,10 +5,13 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/azazel-oss/pokedex/internal/pokedex"
 )
 
 func startRepl() {
 	input := bufio.NewScanner(os.Stdin)
+	pokedex.RunPokedex()
 	for {
 		fmt.Print("Pokedex > ")
 		input.Scan()
