@@ -14,7 +14,7 @@ import (
 
 func startRepl() {
 	cache := pokecache.NewCache(5 * time.Second)
-	config := initializeConfig(&cache)
+	config := initializeConfig(cache)
 	input := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")

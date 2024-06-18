@@ -37,7 +37,7 @@ func RunPokedex(urlToVisit string) locationBodyJson {
 	return response
 }
 
-func GetNextLocations(cache pokecache.Cache, url string) locationBodyJson {
+func GetNextLocations(cache *pokecache.Cache, url string) locationBodyJson {
 	if value, ok := cache.Get(url); ok {
 		response := locationBodyJson{}
 		json.Unmarshal(value, &response)
@@ -61,7 +61,7 @@ func GetNextLocations(cache pokecache.Cache, url string) locationBodyJson {
 	return response
 }
 
-func GetPreviousLocations(cache pokecache.Cache, url string) locationBodyJson {
+func GetPreviousLocations(cache *pokecache.Cache, url string) locationBodyJson {
 	if value, ok := cache.Get(url); ok {
 		response := locationBodyJson{}
 		json.Unmarshal(value, &response)

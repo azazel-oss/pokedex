@@ -8,7 +8,7 @@ import (
 )
 
 func commandMap(config *locationConfig) error {
-	locationJson := pokedex.GetNextLocations(*config.cache, config.Next.String())
+	locationJson := pokedex.GetNextLocations(config.cache, config.Next.String())
 	for _, location := range locationJson.Results {
 		fmt.Println(location.Name)
 	}
