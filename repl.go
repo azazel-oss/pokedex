@@ -68,7 +68,7 @@ func getCommands() map[string]cliCommand {
 	}
 }
 
-func initializeConfig(cache *pokecache.Cache) locationConfig {
+func initializeConfig(cache pokecache.Cache) locationConfig {
 	u, err := url.Parse("https://pokeapi.co/api/v2/location?offset=0&limit=20")
 	if err != nil {
 		log.Fatal(err)
@@ -76,6 +76,6 @@ func initializeConfig(cache *pokecache.Cache) locationConfig {
 	return locationConfig{
 		Next:     u,
 		Previous: nil,
-		cache:    cache,
+		cache:    &cache,
 	}
 }
