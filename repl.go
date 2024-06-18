@@ -3,15 +3,15 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
+	"net/url"
 	"os"
 	"strings"
-
-	"github.com/azazel-oss/pokedex/internal/pokedex"
 )
 
 func startRepl() {
+	config := initializeConfig()
 	input := bufio.NewScanner(os.Stdin)
-	pokedex.RunPokedex()
 	for {
 		fmt.Print("Pokedex > ")
 		input.Scan()
@@ -24,7 +24,7 @@ func startRepl() {
 			fmt.Println("Unknown Command")
 			continue
 		}
-		err := command.callback()
+		err := command.callback(&config)
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -49,5 +49,28 @@ func getCommands() map[string]cliCommand {
 			description: "Exit the Pokedex",
 			callback:    commandExit,
 		},
+		"map": {
+			name:             "map",
+			description:      "The map command displays the names of 20 location areas in the Pokemon world. Each subsequent call to map should display the next 20 locations, and so on.",
+			callback:         commandMap,
+			isConfigRequired: true,
+		},
+		"mapb": {
+			name:             "mapb",
+			description:      "Similar to the map command, however, instead of displaying the next 20 locations, it displays the previous 20 locations. It's a way to go back.",
+			callback:         commandMapb,
+			isConfigRequired: true,
+		},
+	}
+}
+
+func initializeConfig() locationConfig {
+	u, err := url.Parse("https://pokeapi.co/api/v2/location")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return locationConfig{
+		Next:     u,
+		Previous: nil,
 	}
 }

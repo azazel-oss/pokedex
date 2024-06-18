@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func commandHelp() error {
+func commandHelp(_ *locationConfig) error {
 	commands := getCommands()
 	for _, value := range commands {
 		fmt.Println(value.name)

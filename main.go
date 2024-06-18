@@ -1,25 +1,17 @@
 package main
 
+import "net/url"
+
 type cliCommand struct {
-	callback    func() error
-	name        string
-	description string
+	callback         func(*locationConfig) error
+	name             string
+	description      string
+	isConfigRequired bool
 }
 
-func getPropertiesForCommand(command string) cliCommand {
-	commands := map[string]cliCommand{
-		"help": {
-			name:        "help",
-			description: "Displays a help message",
-			callback:    commandHelp,
-		},
-		"exit": {
-			name:        "exit",
-			description: "Exit the Pokedex",
-			callback:    commandExit,
-		},
-	}
-	return commands[command]
+type locationConfig struct {
+	Previous *url.URL
+	Next     *url.URL
 }
 
 func main() {
