@@ -7,10 +7,14 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/azazel-oss/pokedex/internal/pokecache"
 )
 
 func startRepl() {
-	config := initializeConfig()
+	cache := pokecache.NewCache(5 * time.Second)
+	config := initializeConfig(&cache)
 	input := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
@@ -64,13 +68,14 @@ func getCommands() map[string]cliCommand {
 	}
 }
 
-func initializeConfig() locationConfig {
-	u, err := url.Parse("https://pokeapi.co/api/v2/location")
+func initializeConfig(cache *pokecache.Cache) locationConfig {
+	u, err := url.Parse("https://pokeapi.co/api/v2/location?offset=0&limit=20")
 	if err != nil {
 		log.Fatal(err)
 	}
 	return locationConfig{
 		Next:     u,
 		Previous: nil,
+		cache:    cache,
 	}
 }

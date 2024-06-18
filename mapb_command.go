@@ -12,7 +12,7 @@ func commandMapb(config *locationConfig) error {
 	if config.Previous == nil {
 		return errors.New("you are at the first page")
 	}
-	locationJson := pokedex.RunPokedex(config.Previous.String())
+	locationJson := pokedex.GetPreviousLocations(*config.cache, config.Next.String())
 	for _, location := range locationJson.Results {
 		fmt.Println(location.Name)
 	}
