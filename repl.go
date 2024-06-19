@@ -79,6 +79,11 @@ func getCommands() map[string]cliCommand {
 			description: "Lets you catch a pokemon and add it to your pokedex, it is harder to catch a pokemon if its base exp is high",
 			callback:    commandCatch,
 		},
+		"inspect": {
+			name:        "inspect [pokemon-name]",
+			description: "Gives you the details of the pokemon if you have already caught it",
+			callback:    commandInspect,
+		},
 	}
 }
 
