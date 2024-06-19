@@ -67,30 +67,30 @@ func GetPokemonForCatching(cache *pokecache.Cache, pokemon string) (pokemonBodyJ
 	return response, nil
 }
 
-func GetPokemonsByLocationArea(cache *pokecache.Cache, location string) locationAreaBodyJson {
+func GetPokemonsByLocationArea(cache *pokecache.Cache, location string) (locationAreaBodyJson, error) {
 	url := locationBaseUrl + location
 	if value, ok := cache.Get(url); ok {
 		response := locationAreaBodyJson{}
 		json.Unmarshal(value, &response)
-		return response
+		return response, nil
 	}
 
 	res, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
+		return locationAreaBodyJson{}, errors.New("this location doesn't even exist, are you tweakin'?")
 	}
 	body, err := io.ReadAll(res.Body)
 	res.Body.Close()
 	if res.StatusCode > 299 {
-		log.Fatalf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
+		return locationAreaBodyJson{}, errors.New("this location doesn't even exist, are you tweakin'?")
 	}
 	if err != nil {
-		log.Fatal(err)
+		return locationAreaBodyJson{}, errors.New("this location doesn't even exist, are you tweakin'?")
 	}
 	response := locationAreaBodyJson{}
 	json.Unmarshal(body, &response)
 	cache.Add(url, body)
-	return response
+	return response, nil
 }
 
 func GetNextLocations(cache *pokecache.Cache, url string) locationBodyJson {
