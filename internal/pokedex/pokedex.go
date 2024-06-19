@@ -2,6 +2,7 @@ package pokedex
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"log"
 	"net/http"
@@ -40,30 +41,30 @@ type pokemonBodyJson struct {
 	ID             int    `json:"id"`
 }
 
-func GetPokemonForCatching(cache *pokecache.Cache, pokemon string) pokemonBodyJson {
+func GetPokemonForCatching(cache *pokecache.Cache, pokemon string) (pokemonBodyJson, error) {
 	url := pokemonBaseUrl + pokemon
 	if value, ok := cache.Get(url); ok {
 		response := pokemonBodyJson{}
 		json.Unmarshal(value, &response)
-		return response
+		return response, nil
 	}
 
 	res, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
+		return pokemonBodyJson{}, errors.New("this pokemon doesn't exist")
 	}
 	body, err := io.ReadAll(res.Body)
 	res.Body.Close()
 	if res.StatusCode > 299 {
-		log.Fatalf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
+		return pokemonBodyJson{}, errors.New("this pokemon doesn't exist")
 	}
 	if err != nil {
-		log.Fatal(err)
+		return pokemonBodyJson{}, errors.New("this pokemon doesn't exist")
 	}
 	response := pokemonBodyJson{}
 	json.Unmarshal(body, &response)
 	cache.Add(url, body)
-	return response
+	return response, nil
 }
 
 func GetPokemonsByLocationArea(cache *pokecache.Cache, location string) locationAreaBodyJson {

@@ -15,7 +15,10 @@ func commandCatch(config *locationConfig, words []string) error {
 	if len(words) < 2 {
 		return errors.New("this commands needs at least one argument")
 	}
-	pokemonJson := pokedex.GetPokemonForCatching(config.cache, words[1])
+	pokemonJson, err := pokedex.GetPokemonForCatching(config.cache, words[1])
+	if err != nil {
+		return err
+	}
 	random := rand.Intn(pokemonJson.BaseExperience)
 	if random > pokemonJson.BaseExperience-30 {
 		fmt.Println(pokemonJson.Name + " has been caught. Congratulations.")
