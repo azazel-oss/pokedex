@@ -12,6 +12,12 @@ import (
 	"github.com/azazel-oss/pokedex/internal/pokecache"
 )
 
+type Pokemon struct {
+	Name           string
+	Id             int
+	BaseExperience int
+}
+
 func startRepl() {
 	cache := pokecache.NewCache(5 * time.Second)
 	config := initializeConfig(cache)
@@ -82,8 +88,9 @@ func initializeConfig(cache pokecache.Cache) locationConfig {
 		log.Fatal(err)
 	}
 	return locationConfig{
-		Next:     u,
-		Previous: nil,
-		cache:    &cache,
+		Next:        u,
+		Previous:    nil,
+		cache:       &cache,
+		userPokedex: map[string]Pokemon{},
 	}
 }

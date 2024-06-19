@@ -13,9 +13,10 @@ type cliCommand struct {
 }
 
 type locationConfig struct {
-	Previous *url.URL
-	Next     *url.URL
-	cache    *pokecache.Cache
+	Previous    *url.URL
+	Next        *url.URL
+	cache       *pokecache.Cache
+	userPokedex map[string]Pokemon
 }
 
 func main() {
