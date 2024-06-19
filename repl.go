@@ -28,7 +28,7 @@ func startRepl() {
 			fmt.Println("Unknown Command")
 			continue
 		}
-		err := command.callback(&config)
+		err := command.callback(&config, words)
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -54,22 +54,25 @@ func getCommands() map[string]cliCommand {
 			callback:    commandExit,
 		},
 		"map": {
-			name:             "map",
-			description:      "The map command displays the names of 20 location areas in the Pokemon world. Each subsequent call to map should display the next 20 locations, and so on.",
-			callback:         commandMap,
-			isConfigRequired: true,
+			name:        "map",
+			description: "The map command displays the names of 20 location areas in the Pokemon world. Each subsequent call to map should display the next 20 locations, and so on.",
+			callback:    commandMap,
 		},
 		"mapb": {
-			name:             "mapb",
-			description:      "Similar to the map command, however, instead of displaying the next 20 locations, it displays the previous 20 locations. It's a way to go back.",
-			callback:         commandMapb,
-			isConfigRequired: true,
+			name:        "mapb",
+			description: "Similar to the map command, however, instead of displaying the next 20 locations, it displays the previous 20 locations. It's a way to go back.",
+			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore [location-area]",
+			description: "Gives you a list of pokemons which can be found in the asked location area",
+			callback:    commandExplore,
 		},
 	}
 }
 
 func initializeConfig(cache pokecache.Cache) locationConfig {
-	u, err := url.Parse("https://pokeapi.co/api/v2/location?offset=0&limit=20")
+	u, err := url.Parse("https://pokeapi.co/api/v2/location-area?offset=0&limit=20")
 	if err != nil {
 		log.Fatal(err)
 	}

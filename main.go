@@ -7,10 +7,9 @@ import (
 )
 
 type cliCommand struct {
-	callback         func(*locationConfig) error
-	name             string
-	description      string
-	isConfigRequired bool
+	callback    func(*locationConfig, []string) error
+	name        string
+	description string
 }
 
 type locationConfig struct {

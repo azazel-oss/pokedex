@@ -8,7 +8,7 @@ import (
 	"github.com/azazel-oss/pokedex/internal/pokedex"
 )
 
-func commandMapb(config *locationConfig) error {
+func commandMapb(config *locationConfig, _ []string) error {
 	if config.Previous == nil {
 		return errors.New("you are at the first page")
 	}

@@ -7,7 +7,7 @@ import (
 	"github.com/azazel-oss/pokedex/internal/pokedex"
 )
 
-func commandMap(config *locationConfig) error {
+func commandMap(config *locationConfig, _ []string) error {
 	locationJson := pokedex.GetNextLocations(config.cache, config.Next.String())
 	for _, location := range locationJson.Results {
 		fmt.Println(location.Name)
