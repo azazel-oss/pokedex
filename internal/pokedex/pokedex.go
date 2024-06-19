@@ -9,7 +9,10 @@ import (
 	"github.com/azazel-oss/pokedex/internal/pokecache"
 )
 
-const locationBaseUrl = "https://pokeapi.co/api/v2/location-area/"
+const (
+	locationBaseUrl = "https://pokeapi.co/api/v2/location-area/"
+	pokemonBaseUrl  = "https://pokeapi.co/api/v2/pokemon/"
+)
 
 type locationBodyJson struct {
 	Next     *string `json:"next"`
@@ -29,6 +32,38 @@ type locationAreaBodyJson struct {
 			URL  string `json:"url"`
 		} `json:"pokemon"`
 	} `json:"pokemon_encounters"`
+}
+
+type pokemonBodyJson struct {
+	Name           string `json:"name"`
+	BaseExperience int    `json:"base_experience"`
+	ID             int    `json:"id"`
+}
+
+func GetPokemonForCatching(cache *pokecache.Cache, pokemon string) pokemonBodyJson {
+	url := pokemonBaseUrl + pokemon
+	if value, ok := cache.Get(url); ok {
+		response := pokemonBodyJson{}
+		json.Unmarshal(value, &response)
+		return response
+	}
+
+	res, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
+	}
+	body, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	if res.StatusCode > 299 {
+		log.Fatalf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+	response := pokemonBodyJson{}
+	json.Unmarshal(body, &response)
+	cache.Add(url, body)
+	return response
 }
 
 func GetPokemonsByLocationArea(cache *pokecache.Cache, location string) locationAreaBodyJson {

@@ -68,6 +68,11 @@ func getCommands() map[string]cliCommand {
 			description: "Gives you a list of pokemons which can be found in the asked location area",
 			callback:    commandExplore,
 		},
+		"catch": {
+			name:        "catch [pokemon-name]",
+			description: "Lets you catch a pokemon and add it to your pokedex, it is harder to catch a pokemon if its base exp is high",
+			callback:    commandCatch,
+		},
 	}
 }
 
